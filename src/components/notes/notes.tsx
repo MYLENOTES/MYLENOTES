@@ -48,14 +48,14 @@ const popularNotes = [
 
 export default function Notes() {
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5 mt-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 mt-4">
       {popularNotes.map((note, index) => (
         <div
           key={index}
-          className="w-80 md:w-72  h-auto rounded-lg hover:bg-primary hover:bg-opacity-20 relative overflow-hidden flex flex-col justify-between "
+          className="w-full h-auto rounded-lg hover:bg-primary hover:bg-opacity-20 relative overflow-hidden flex flex-col justify-between"
         >
           <div className="h-full">
-            <div className="w-80 h-64 rounded-lg bg-primary bg-opacity-60 relative overflow-hidden">
+            <div className="w-full h-64 rounded-lg bg-primary bg-opacity-60 relative overflow-hidden">
               <Image
                 src={note.imageSrc}
                 alt="notes image"
@@ -64,7 +64,7 @@ export default function Notes() {
                 className="rounded-lg"
               />
             </div>
-            <p className="mt-2  px-3 text-text text-xl font-semibold">
+            <p className="mt-2 px-3 text-text text-xl font-semibold">
               {note.title}
             </p>
             <p className="px-3 mt-1 mb-1 text-text text-xs font-normal">
@@ -73,7 +73,7 @@ export default function Notes() {
                 : note.author}
             </p>
           </div>
-          <div className="flex gap-1 mt-1 px-3 mb-3">
+          <div className="flex gap-1 mt-1 px-3 mb-3 items-center">
             <Image
               src={note.profilePic}
               alt="profile pic"
@@ -81,7 +81,7 @@ export default function Notes() {
               height={38}
               className="rounded-full hover:cursor-pointer"
             />
-            <p className="px-3 pb-1 mt-1 text-text text-sm font-medium flex items-center">
+            <p className="px-3 text-text text-sm font-medium">
               {note.authorName}
             </p>
           </div>

@@ -71,11 +71,11 @@ export default function Home() {
           <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-black to-transparent z-20"></div>
         </div>
       </div>
-      <div className="h-auto p-2 md:p-4 lg:p-5 px-10 md2:px-12 lg:px-16 ml-3 py-12 flex flex-col">
+      <div className="h-auto p-2 md:p-4 lg:p-5 px-10 md:px-12 lg:px-14  ml-3 py-12 flex flex-col">
         <h3 className="font-bold text-xl text-text mb-3">Popular Notes</h3>
         <Notes/>
       </div>
-      <div className="h-auto p-2 md:p-4 lg:p-5 px-10 md2:px-12 lg:px-16 ml-3 py-12 flex flex-col">
+      <div className="h-auto p-2 md:p-4 lg:p-5 px-10 md:px-12 lg:px-14 ml-3 py-12 flex flex-col">
         <h3 className="font-bold text-xl text-text mb-3">CITK Notes</h3>
         <Notes />
       </div>
