@@ -12,18 +12,9 @@ import { VscThreeBars } from "react-icons/vsc";
 import { AiOutlineClose } from "react-icons/ai";
 
 const links = [
-  {
-    name: "home",
-    path: "/",
-  },
-  {
-    name: "notes",
-    path: "/notes",
-  },
-  {
-    name: "about",
-    path: "/about",
-  },
+  { name: "home", path: "/" },
+  { name: "notes", path: "/notes" },
+  { name: "about", path: "/about" },
 ];
 
 export default function Navbar() {
@@ -35,6 +26,19 @@ export default function Navbar() {
   const [hover, setHover] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => setIsTop(window.scrollY === 0);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const openLogin = () => {
     setShowLogin(true);
@@ -51,40 +55,12 @@ export default function Navbar() {
     setShowLogin(false);
   };
 
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 0) {
-        setIsTop(false);
-      } else {
-        setIsTop(true);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+  const closeMenu = () => setIsOpen(false);
 
   const logout = async () => {
     try {
       await signOut(auth);
-      console.log("user signed out successfully");
+      console.log("User signed out successfully");
     } catch (error) {
       console.error("Error signing out: ", error);
     }
@@ -93,25 +69,25 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`hidden md:flex h-12 w-full items-center justify-between fixed top-0 z-30 px-6 sm:px-2
-          ${isTop ? "bg-transparent" : "bg-background shadow-md"}
-        `}
+        className={`hidden md:flex h-16 w-full items-center justify-between fixed top-0 z-30 px-6 sm:px-2 transition-all duration-300 ease-in-out ${
+          isTop ? "bg-transparent" : "bg-background shadow-lg"
+        }`}
       >
         <Link href="/">
           <Image
-            src={"/logo.png"}
+            src="/logo.png"
             alt="logo"
             height={80}
             width={175}
-            className="p-1"
+            className="p-1 transition-transform duration-500 transform hover:scale-105"
           />
         </Link>
-        <ul className="flex gap-5">
+        <ul className="flex gap-6">
           {links.map((link, index) => (
-            <li key={index} className="inline-block uppercase font-semibold">
+            <li key={index} className="uppercase font-semibold">
               <Link
                 href={link.path}
-                className={`text-text hover:text-primary duration-500 text-md sm:text-sm ${
+                className={`text-text hover:text-primary transition-colors duration-500 text-md sm:text-sm ${
                   pathname === link.path
                     ? "text-primary border-b-2 border-primary"
                     : ""
@@ -123,54 +99,51 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="flex justify-end items-center gap-2">
-          {isLoggedIn && (
+        <div className="flex items-center gap-4">
+          {isLoggedIn ? (
             <div
               onMouseEnter={() => setHover(true)}
               onMouseLeave={() => setHover(false)}
-              className=""
+              className="relative"
             >
               <Image
-                src={"/dp.jpg"}
+                src="/dp.jpg"
                 alt="profile pic"
                 width={38}
                 height={38}
-                className="rounded-full hover:cursor-pointer"
+                className="rounded-full cursor-pointer transition-transform duration-300 hover:scale-110"
               />
 
               {hover && (
-                <div className="flex flex-col text-xs text-gray-800 absolute top-12 right-2 rounded-md bg-white p-1 hover:cursor-pointer">
-                  <a className="p-1 px-3 hover:bg-gray-300 rounded-sm ">
-                    Wishlist
-                  </a>
+                <div className="absolute right-0 top-10 w-40 bg-white shadow-md rounded-md py-2 text-xs text-gray-800">
+                  <a className="block px-4 py-2 hover:bg-gray-100">Wishlist</a>
                   <a
                     onClick={logout}
-                    className="p-1 px-3 hover:bg-gray-300 rounded-sm "
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
                     Logout
                   </a>
                 </div>
               )}
             </div>
-          )}
-
-          {!isLoggedIn && !showLogin && (
-            <button
-              onClick={() => setShowLogin(true)}
-              className="bg-transparent text-text px-4 py-1 border border-text rounded-md text-md hover:bg-text hover:text-background"
-            >
-              Login
-            </button>
-          )}
-          {!isLoggedIn && !showSigUp && (
-            <button
-              onClick={() => setShowSignUp(true)}
-              className="bg-transparent text-text px-4 py-1 border border-text rounded-md text-md hover:bg-text hover:text-background"
-            >
-              Signup
-            </button>
+          ) : (
+            <>
+              <button
+                onClick={openLogin}
+                className="px-4 py-2 border border-text text-text rounded-lg transition-all duration-300 hover:bg-text hover:text-background"
+              >
+                Login
+              </button>
+              <button
+                onClick={openSignup}
+                className="px-4 py-2 border border-text text-text rounded-lg transition-all duration-300 hover:bg-text hover:text-background"
+              >
+                Signup
+              </button>
+            </>
           )}
         </div>
+
         <Login
           show={showLogin}
           onClose={() => setShowLogin(false)}
@@ -187,61 +160,71 @@ export default function Navbar() {
           onClose={() => setShowForgotPassword(false)}
         />
       </nav>
+
+      {/* Mobile Navbar */}
       <div className="sm:hidden">
         <nav
-          className={`h-12 w-full fixed top-0 z-30 px-4 flex items-center justify-between
-            ${!isTop || isOpen ? "bg-background" : "bg-transparent"}
-          `}
+          className={`h-16 w-full fixed top-0 z-30 px-4 flex items-center justify-between transition-all duration-300 ease-in-out ${
+            isTop || isOpen ? "bg-transparent" : "bg-background shadow-lg"
+          }`}
         >
           <Link href="/">
             <Image
-              src={"/logo.png"}
+              src="/logo.png"
               alt="logo"
               height={80}
               width={175}
-              className="p-1"
+              className="p-1 transition-transform duration-500 transform hover:scale-105"
             />
           </Link>
-          <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
-            {isOpen ? <AiOutlineClose size={30} className='text-text' /> : <VscThreeBars size={30} className='text-text' />}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="focus:outline-none"
+          >
+            {isOpen ? (
+              <AiOutlineClose size={30} className="text-text" />
+            ) : (
+              <VscThreeBars size={30} className="text-text" />
+            )}
           </button>
           {isOpen && (
-            <div className="flex flex-col gap-1 py-3 absolute top-12 left-0 w-full bg-background text-text text-center">
+            <div className="flex flex-col gap-1 py-3 absolute top-16 left-0 w-full bg-background text-text text-center transition-all duration-500 ease-in-out">
               {links.map((link, index) => (
                 <Link
                   key={index}
                   href={link.path}
                   onClick={closeMenu}
-                  className="block py-3 hover:text-primary hover:bg-gray-900"
+                  className="block py-3 hover:text-primary hover:bg-gray-900 transition-colors duration-300"
                 >
                   <p>{link.name}</p>
                 </Link>
               ))}
-              {!isLoggedIn && !showLogin && (
-                <p
-                  onClick={() => {
-                    setShowLogin(true);
-                    closeMenu();
-                  }}
-                  className="block py-3 hover:text-primary hover:bg-gray-900"
-                >
-                  Login
-                </p>
-              )}
-              {!isLoggedIn && !showSigUp && (
-                <p
-                  onClick={() => {
-                    setShowSignUp(true);
-                    closeMenu();
-                  }}
-                  className="block py-3 hover:text-primary hover:bg-gray-900"
-                >
-                  Signup
-                </p>
+              {!isLoggedIn && (
+                <>
+                  <p
+                    onClick={() => {
+                      setShowLogin(true);
+                      closeMenu();
+                    }}
+                    className="block py-3 hover:text-primary hover:bg-gray-900 cursor-pointer"
+                  >
+                    Login
+                  </p>
+                  <p
+                    onClick={() => {
+                      setShowSignUp(true);
+                      closeMenu();
+                    }}
+                    className="block py-3 hover:text-primary hover:bg-gray-900 cursor-pointer"
+                  >
+                    Signup
+                  </p>
+                </>
               )}
             </div>
           )}
         </nav>
+
         <Login
           show={showLogin}
           onClose={() => setShowLogin(false)}
