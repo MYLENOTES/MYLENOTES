@@ -8,7 +8,7 @@ const values = [
         description: "We believe that together, we can achieve more.",
     },
     {
-        title: "Knowledge sharing",
+        title: "Knowledge is sharing",
         description: "We're passionate about making knowledge accessible.",
     },
     {
@@ -34,7 +34,7 @@ const team = [
     },
     {
         image: "/team/nabadeep.jpg",
-        name: "Nabadeep Das",
+        name: "Nabadeep Kr.  Das",
         role: "Backend Developer",
         github: "https://github.com/NABADEEP069",
         linkedin: "https://www.linkedin.com/in/nabadeep-kr-das"
@@ -107,14 +107,7 @@ export default function AboutPage() {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4 items-start px-4 mt-10 w-full md:w-3/5 text-left">
-                <h3 className="text-accent text-2xl md:text-3xl font-bold">Contact Us</h3>
-                <ul className="text-text text-sm md:text-md">
-                    {Contact.map((contact, index) => (
-                        <li key={index} className="flex items-center gap-1">{contact.title}: {contact.description}</li>
-                    ))}
-                </ul>
-            </div>
+           
 
             <div className="flex flex-col gap-4 items-start px-4 mt-10 w-full md:w-3/5 text-left">
                 <h3 className="text-accent text-2xl md:text-3xl font-bold">Social Media</h3>

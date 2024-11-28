@@ -21,7 +21,7 @@ const features = [
     description: "Find and share notes instantly, and get the most out of your study sessions, with ease and efficiency!",
   },
   {
-    title: "Share Notes",
+    title: "Share Your Notes",
     description: "Upload your notes and help fellow students, while gaining access to a vast library of notes!",
   },
   {
