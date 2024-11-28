@@ -9,9 +9,9 @@ interface UploadFormProps {
 
 const UploadForm: React.FC<UploadFormProps> = ({ onClose }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const inputStyles =
-    "w-full h-10 border text-gray-800 text-xs lg:text-sm border-text rounded-lg px-2";
-  const labelStyles = "text-text mt-4";
+
+  const inputStyles = "w-full h-10 border text-gray-800 text-xs md:text-sm border-text rounded-lg px-2";
+  const labelStyles = "text-text text-sm md:text-md mt-2 md:mt-4";
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -25,7 +25,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-background bg-opacity-50 z-50">
-      <div className="relative sm:w-60 md:w-80 md2:w-80  h-auto p-6 flex flex-col items-center justify-center bg-background border border-text rounded-lg">
+      <div className="relative w-5/6 md:w-2/5 h-auto p-6 flex flex-col items-center justify-center bg-background border border-text rounded-lg">
         <form className="w-full flex flex-col items-start">
           <label htmlFor="title" className={labelStyles}>
             Title
@@ -52,6 +52,7 @@ const UploadForm: React.FC<UploadFormProps> = ({ onClose }) => {
         </form>
 
         <div className="flex flex-col md:flex-row items-center justify-evenly w-full mt-4">
+
           <div className="flex flex-col items-center">
             <label
               htmlFor="file"
@@ -63,14 +64,15 @@ const UploadForm: React.FC<UploadFormProps> = ({ onClose }) => {
                 className="hidden"
                 onChange={handleFileChange}
               />
+
               <FaCloudUploadAlt className="text-4xl text-primary" />
             </label>
-            {selectedFile && (
+            {selectedFile ? (
               <div className="mt-2 text-text text-xs">
                 {getTruncatedFileName(selectedFile.name)}
               </div>
-            )}
-            <span className="text-text text-sm mt-1">Upload file</span>
+            ) : <span className="text-text text-xs mt-1">Upload file</span>}
+            
           </div>
           <button className="bg-primary text-text p-2 px-4 rounded-md mt-1">
             Submit

@@ -99,6 +99,7 @@ export default function Home() {
           
         </h3>
         <div className="w-full flex justify-center">
+
         <Notes />
       </div>
       </div>
