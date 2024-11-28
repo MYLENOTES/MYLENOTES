@@ -1,7 +1,12 @@
+import { onAuthStateChanged } from "firebase/auth";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { auth } from "../../../firebase.config";
+import Signup from "../auth/singup";
+import Login from "@/components/auth/login";
+import ForgotPassword from "@/components/auth/forgotPassword";
 
 const images = [
   {
@@ -24,6 +29,39 @@ const images = [
 
 export default function HomeHero() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+
+  const openLogin = () => {
+    setShowLogin(true);
+    setShowSignup(false);
+  };
+
+  const openSignup = () => {
+    setShowSignup(true);
+    setShowLogin(false);
+  };
+
+  const openForgotPassword = () => {
+    setShowForgotPassword(true);
+    setShowLogin(false);
+  };
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % images.length);
@@ -31,15 +69,16 @@ export default function HomeHero() {
 
     return () => clearInterval(interval);
   }, []);
+  
+
   return (
     <div className="flex justify-center items-center relative h-screen w-full ">
       <div className="relative w-full h-full overflow-hidden carousel">
         {images.map((src, index) => (
           <div
             key={index}
-            className={`absolute w-full h-full transition-opacity duration-1000 ${
-              index === activeIndex ? "opacity-40" : "opacity-0"
-            } carousel-item`}
+            className={`absolute w-full h-full transition-opacity duration-1000 ${index === activeIndex ? "opacity-40" : "opacity-0"
+              } carousel-item`}
           >
             <Image src={src.src} alt="" layout="fill" objectFit="cover" />
           </div>
@@ -54,9 +93,23 @@ export default function HomeHero() {
             Connect with students, share knowledge, and succeed together
           </h4>
         </div>
-        <button className="bg-primary hover:bg-secondary text-text font-semibold p-2 px-11 mt-3 rounded-md">
-          Join the Community
-        </button>
+        {!isLoggedIn && (
+          <button onClick={() => setShowSignup(true)} className="bg-primary hover:bg-secondary text-text font-semibold p-2 px-11 mt-3 rounded-md">
+            Join the Community
+          </button>
+        )}
+        <Signup show={showSignup}
+          onClose={() => setShowSignup(false)}
+          switchToLogin={openLogin} 
+        />
+        <Login show={showLogin}
+          onClose={() => setShowLogin(false)}
+          switchToSignUp={openSignup}
+          switchToForgotPassword={openForgotPassword}
+        />
+        <ForgotPassword show={showForgotPassword}
+          onClose={() => setShowForgotPassword(false)}
+        />
       </div>
     </div>
   );
