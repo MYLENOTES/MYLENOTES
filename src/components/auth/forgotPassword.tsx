@@ -25,37 +25,60 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ show, onClose }) => {
     }
   };
 
+  if (!show) return null;
+
   return (
-    <div className={`fixed inset-0 flex items-center justify-center bg-background bg-opacity-50 z-50 ${show ? "" : "hidden"}`}>
-      <div className="relative w-3/4 md:w-5/12 lg:w-4/12 h-auto py-10 rounded-lg bg-background border border-text flex items-center justify-center">
-      <div className="flex flex-col justify-center items-center px-9 md:px-12 lg:px-16">
-            <h1 className="text-text font-semibold text-2xl lg:text-3xl pb-3">Forgot Password</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center text-gray-500">
-              <label htmlFor="email" className="text-text  text-sm">
-                Please enter your registered email to recover your password. A mail will be sent to your email with a link to reset your password.
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-sm h-auto rounded-xl bg-gray-900 border-2 border-primary border-opacity-30 shadow-2xl shadow-primary/20 animate-fadeIn">
+        <div className="flex flex-col justify-center items-center px-6 py-6">
+          {/* Header */}
+          <div className="text-center mb-5">
+            <h1 className="text-text font-bold text-2xl mb-1">
+              Reset Password
+            </h1>
+            <p className="text-text opacity-60 text-xs">
+              We&apos;ll send you a password reset link
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col w-full gap-3">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="email" className="text-text text-xs font-medium opacity-80">
+                Email Address
               </label>
+              <p className="text-text opacity-50 text-xs mb-1">
+                Enter your registered email address to receive a password reset link.
+              </p>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="text-gray-500 text-sm mb-2 mt-3 px-5 p-2 rounded-md border border-gray-300 w-full"
+                className="bg-gray-800 bg-opacity-50 text-text text-sm px-3 py-2 rounded-lg border border-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-30 transition-all"
                 required
               />
-              <button
-                  className="bg-secondary hover:bg-primary mt-1 p-2 text-lg px-6 rounded-md text-white w-44"
-                  type="submit"
-                >
-                  Submit
-                </button>
-              {message && <p className="text-sm mt-2 text-green-600">{message}</p>}
-            </form>
-          </div>
-          <div className="absolute top-1 right-2 rounded-full">
-            <button className="p-1 text-text" onClick={onClose} type="button">
-              <RiCloseFill size={24} />
+            </div>
+
+            <button
+              className="bg-primary bg-opacity-90 hover:bg-opacity-100 text-background font-semibold text-sm mt-1 py-2 px-4 rounded-lg transition-all duration-300 shadow-lg hover:scale-105"
+              type="submit"
+            >
+              Send Reset Link
             </button>
-          </div>
+
+            {message && (
+              <div className="bg-green-500 bg-opacity-10 border border-green-500 border-opacity-30 text-green-400 text-xs px-3 py-1.5 rounded-lg text-center">
+                {message}
+              </div>
+            )}
+          </form>
+        </div>
+        <button
+          className="absolute top-3 right-3 p-1.5 text-text hover:text-primary hover:bg-gray-800 rounded-full transition-all"
+          onClick={onClose}
+          type="button"
+        >
+          <RiCloseFill size={20} />
+        </button>
       </div>
     </div>
   );

@@ -13,20 +13,40 @@ const pool = new Pool({
 });
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const body = await req.json();
-  const { title, subject, institute, description, filelink } = body;
-  const client = await pool.connect();
   try {
-    const result = await client.query(
-      `INSERT INTO public.notes (title, subject, institute, description, filelink) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
-      [title, subject, institute, description, filelink]
-    );
-    const note_id = result.rows[0].id;
-    client.release();
-    return NextResponse.json({ message: "Note added successfully", note_id });
+    const body = await req.json();
+    const { title, subject, institute, description, filelink } = body;
+    
+    if (!title || !subject || !institute || !filelink) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `INSERT INTO public.notes (title, subject, institute, description, filelink) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+        [title, subject, institute, description, filelink]
+      );
+      const note_id = result.rows[0].id;
+      client.release();
+      return NextResponse.json({ message: "Note added successfully", note_id }, { status: 200 });
+    } catch (err) {
+      client.release();
+      console.error("Database error:", err);
+      return NextResponse.json(
+        { message: "Database error", error: err },
+        { status: 500 }
+      );
+    }
   } catch (err) {
-    console.log(err);
-    return NextResponse.json({ message: "Internal server error", err });
+    console.error("Error processing request:", err);
+    return NextResponse.json(
+      { message: "Internal server error", error: err },
+      { status: 500 }
+    );
   }
 }
 
@@ -50,5 +70,46 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.log(err);
     return NextResponse.json({ message: "Internal server error", err });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json(
+      { message: "Note ID is required" },
+      { status: 400 }
+    );
+  }
+
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM public.notes WHERE id = $1 RETURNING *`,
+      [id]
+    );
+
+    client.release();
+
+    if (result.rowCount === 0) {
+      return NextResponse.json(
+        { message: "Note not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "Note deleted successfully", deletedNote: result.rows[0] },
+      { status: 200 }
+    );
+  } catch (err) {
+    client.release();
+    console.error("Error deleting note:", err);
+    return NextResponse.json(
+      { message: "Internal server error", error: err },
+      { status: 500 }
+    );
   }
 }

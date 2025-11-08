@@ -1,8 +1,13 @@
+"use client";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import UploadForm from "./uploadForm";
 
-export default function UploadNotes() {
+interface UploadNotesProps {
+  onSuccess?: () => void;
+}
+
+export default function UploadNotes({ onSuccess }: UploadNotesProps) {
   const [showPopup, setShowPopup] = useState(false);
 
     return (
@@ -18,7 +23,7 @@ export default function UploadNotes() {
           <span>Upload your notes</span>
         </>
       ) : (
-        <UploadForm onClose={() => setShowPopup(false)} />
+        <UploadForm onClose={() => setShowPopup(false)} onSuccess={onSuccess} />
       )}
     </div>
     
