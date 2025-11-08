@@ -54,7 +54,7 @@ export default function HomeHero() {
             Connect with students, share knowledge, and succeed together
           </h4>
         </div>
-        <button className="bg-primary hover:bg-secondary text-text font-semibold p-2 px-11 mt-3 rounded-md">
+        <button className="bg-primary bg-opacity-80 hover:bg-opacity-90 text-background font-semibold p-2 px-11 mt-3 rounded-md transition-all shadow-lg">
           Join the Community
         </button>
       </div>

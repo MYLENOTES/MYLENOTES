@@ -23,27 +23,27 @@ const points = [
 
 export default function HowItWorks() {
   return (
-    <div className="sm:w-10/12 p-3 rounded-lg mt-10 flex flex-col items-center">
-      <h2 className="w-full text-center md:text-3xl sm:text-2xl text-2xl text-text font-semibold mb-8">
-        Explore our vast library of user-uploaded content
+    <div className="w-full max-w-6xl p-6 mt-12 flex flex-col items-center">
+      <h2 className="w-full text-center text-xl md:text-2xl text-text font-medium mb-8 opacity-80">
+        How It Works
       </h2>
-      <div className="bg-secondary bg-opacity-40 p-5 md:p-10 lg:p-20 rounded-lg flex flex-wrap items-start sm:justify-around sm:gap-5 md:gap-10 lg:gap-14">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
         {points.map((point, index) => (
-          <div key={index} className="md:w-96 flex flex-col items-start mb-6">
-            <div className="flex gap-2 items-center justify-center mb-2">
-              <div className="p-1 bg-accent rounded-md text-text w-7 md:w-10 h-7 md:h-10 flex items-center justify-center">
+          <div key={index} className="flex flex-col items-start bg-gray-900 bg-opacity-30 border border-gray-800 rounded-lg p-5 hover:border-gray-700 transition-all">
+            <div className="flex gap-3 items-center mb-3">
+              <div className="bg-primary bg-opacity-20 rounded-md text-primary w-8 h-8 flex items-center justify-center font-medium text-sm flex-shrink-0">
                 {index + 1}
               </div>
-              <h3 className="text-accent font-semibold md:text-2xl text-xl">
+              <h3 className="text-text font-medium text-base">
                 {point.title}
               </h3>
             </div>
-            <ul className="list-disc pl-10">
-              <li className="text-text md:text-md text-sm mb-2">
-                {point.description1}.
+            <ul className="list-disc pl-6 space-y-1">
+              <li className="text-text text-sm opacity-70">
+                {point.description1}
               </li>
-              <li className="text-text md:text-md text-sm">
-                {point.description2}.
+              <li className="text-text text-sm opacity-70">
+                {point.description2}
               </li>
             </ul>
           </div>
