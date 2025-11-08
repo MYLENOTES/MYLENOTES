@@ -85,9 +85,9 @@ const Form: React.FC<FormProps> = ({ onClose, onSuccess }) => {
           });
         }, 500);
         
-        // Create an AbortController with a longer timeout (5 minutes)
+        // Create an AbortController with timeout (60 seconds for Vercel hobby plan)
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minutes
+        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 seconds
         
         const res = await fetch(
           `/api/user/uploadfile?filename=${encodeURIComponent(file.name)}&path=${path}`,
@@ -133,7 +133,7 @@ const Form: React.FC<FormProps> = ({ onClose, onSuccess }) => {
         let errorMessage = "Unknown error";
         if (error instanceof Error) {
           if (error.name === "AbortError") {
-            errorMessage = "Upload timed out after 5 minutes. Please try with a smaller file or check your internet connection.";
+            errorMessage = "Upload timed out after 60 seconds. Please try with a smaller file (recommended under 5MB) or check your internet connection.";
           } else if (error.message.includes("fetch")) {
             errorMessage = "Network error. Please check your internet connection and try again.";
           } else {

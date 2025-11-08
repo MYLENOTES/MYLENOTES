@@ -1,8 +1,8 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
-// Increase timeout for file uploads (5 minutes)
-export const maxDuration = 300;
+// Set timeout for file uploads (60 seconds max for hobby plan)
+export const maxDuration = 60;
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
